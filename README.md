@@ -1,4 +1,4 @@
-Python program that calculates the molecular weight of a formula. Program should accept a formula in whatever form you choose as input from the user, and should display the molecular weight for that formula. Program must be able to handle formulas that:
+Python program that calculates the molecular weight of a formula. Program should accept a formula as input from the user, and should display the molecular weight for that formula. Program must be able to handle formulas that:
 
 - consist of a single element, e.g., He
 - consist of a sequence of elements, e.g., H H O	
