@@ -28,10 +28,9 @@ def calc_mass(instr):
     atom = {}
     i = 0
 
-    while (i < len(instr)):
-        if (ord(instr[i]) >= 65 and ord(instr[i]) <= 90):
-            if (i + 1 < len(instr) and ord(instr[i + 1]) >= 97
-                    and ord(instr[i + 1]) <= 122):
+    while i < len(instr):
+        if 65 <= ord(instr[i]) <= 90:
+            if i + 1 < len(instr) and 97 <= ord(instr[i + 1]) <= 122:
                 el = instr[i:i + 2]
                 i += 1
             else:
@@ -41,57 +40,55 @@ def calc_mass(instr):
             continue
 
             # print(el)
-        if (el not in elements.keys()):
+        if el not in elements.keys():
             print("Element {} not found in dict".format(el))
             exit(1)
 
         # Find how many of this atom
         j = i + 1
-        while (j < len(instr) and ord(instr[j]) <= 57
-               and ord(instr[j]) >= 48):
+        while j < len(instr) and 57 >= ord(instr[j]) >= 48:
             j += 1
 
-        if (i + 1 == j):
+        if i + 1 == j:
             nel = 1
         else:
             nel = int(instr[i + 1:j])
         i = j - 1
 
         # Check for surrounding brackets
-        brac_level = 0  # bracket depth level
+        bract_level = 0  # bracket depth level
         for l in instr[:i]:
-            if (l in open_brackets):
-                brac_level += 1
-            if (l in close_brackets):
-                brac_level -= 1
+            if l in open_brackets:
+                bract_level += 1
+            if l in close_brackets:
+                bract_level -= 1
 
         # Find the multiplication factor
         multf = 1
 
-        # Esape out of the brackets one level at a time
-        for b in range(brac_level, 0, -1):
+        # Escape out of the brackets one level at a time
+        for b in range(bract_level, 0, -1):
             b_current = b
             for l in range(i, len(instr)):
-                if (instr[l] in open_brackets):
+                if instr[l] in open_brackets:
                     b_current += 1
                     break
 
                 if instr[l] in close_brackets:
                     b_current -= 1
-                    if (b_current == b - 1):
+                    if b_current == b - 1:
                         k = l + 1
-                        while (k < len(instr) and ord(instr[k]) <= 57
-                               and ord(instr[k]) >= 48):
+                        while k < len(instr) and 57 >= ord(instr[k]) >= 48:
                             k += 1
 
-                        if (k + 1 == l):
+                        if k + 1 == l:
                             multf *= 1
                         else:
                             multf *= int(instr[l + 1:k])
                         l = k - 1
                         break
 
-        if (el not in atom):
+        if el not in atom:
             atom[el] = multf * nel
         else:
             atom[el] += multf * nel
@@ -106,10 +103,9 @@ def calc_mass(instr):
 def main():
     # take input as string
     formula = input()
-    #printing output without rounding
+    # printing output without rounding
     print(calc_mass(formula))
 
 
 if __name__ == "__main__":
-
     main()
