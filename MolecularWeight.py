@@ -1,11 +1,12 @@
 #!/usr/bin/python3
+# Program that calculates the molecular weight of a formula
 
 
 open_brackets = ["(", "[", "{"]
 close_brackets = ["}", "]", ")"]
 
 
-def calc_mass(instr):
+def calc_mass(arg):
     elements = {'H': 1.00794, 'He': 4.002602, 'Li': 6.941, 'Be': 9.012182, 'B': 10.811, 'C': 12.0107, 'N': 14.0067,
                 'O': 15.9994, 'F': 18.9984032, 'Ne': 20.1797, 'Na': 22.98976928, 'Mg': 24.305, 'Al': 26.9815386,
                 'Si': 28.0855, 'P': 30.973762, 'S': 32.065, 'Cl': 35.453, 'Ar': 39.948, 'K': 39.0983, 'Ca': 40.078,
@@ -28,72 +29,71 @@ def calc_mass(instr):
     atom = {}
     i = 0
 
-    while i < len(instr):
-        if 65 <= ord(instr[i]) <= 90:
-            if i + 1 < len(instr) and 97 <= ord(instr[i + 1]) <= 122:
-                el = instr[i:i + 2]
+    while i < len(arg):
+        if 65 <= ord(arg[i]) <= 90:
+            if i + 1 < len(arg) and 97 <= ord(arg[i + 1]) <= 122:
+                elem = arg[i:i + 2]
                 i += 1
             else:
-                el = instr[i]
+                elem = arg[i]
         else:
             i += 1
             continue
 
             # print(el)
-        if el not in elements.keys():
-            print("Element {} not found in dict".format(el))
+        if elem not in elements.keys():
+            print("Element {} not found in dict".format(elem))
             exit(1)
 
         # Find how many of this atom
         j = i + 1
-        while j < len(instr) and 57 >= ord(instr[j]) >= 48:
+        while j < len(arg) and 57 >= ord(arg[j]) >= 48:
             j += 1
 
         if i + 1 == j:
-            nel = 1
+            not_elem = 1
         else:
-            nel = int(instr[i + 1:j])
+            not_elem = int(arg[i + 1:j])
         i = j - 1
 
         # Check for surrounding brackets
-        bract_level = 0  # bracket depth level
-        for l in instr[:i]:
-            if l in open_brackets:
-                bract_level += 1
-            if l in close_brackets:
-                bract_level -= 1
+        bracket_lvl = 0  # bracket depth level
+        for m in arg[:i]:
+            if m in open_brackets:
+                bracket_lvl += 1
+            if m in close_brackets:
+                bracket_lvl -= 1
 
         # Find the multiplication factor
-        multf = 1
+        m_factor = 1
 
         # Escape out of the brackets one level at a time
-        for b in range(bract_level, 0, -1):
+        for b in range(bracket_lvl, 0, -1):
             b_current = b
-            for l in range(i, len(instr)):
-                if instr[l] in open_brackets:
+            for m in range(i, len(arg)):
+                if arg[m] in open_brackets:
                     b_current += 1
                     break
 
-                if instr[l] in close_brackets:
+                if arg[m] in close_brackets:
                     b_current -= 1
                     if b_current == b - 1:
-                        k = l + 1
-                        while k < len(instr) and 57 >= ord(instr[k]) >= 48:
+                        k = m + 1
+                        while k < len(arg) and 57 >= ord(arg[k]) >= 48:
                             k += 1
 
-                        if k + 1 == l:
-                            multf *= 1
+                        if k + 1 == m:
+                            m_factor *= 1
                         else:
-                            multf *= int(instr[l + 1:k])
-                        l = k - 1
+                            m_factor *= int(arg[m + 1:k])
                         break
 
-        if el not in atom:
-            atom[el] = multf * nel
+        if elem not in atom:
+            atom[elem] = m_factor * not_elem
         else:
-            atom[el] += multf * nel
+            atom[elem] += m_factor * not_elem
         i += 1
-    # calculating mass for all atom or molecular weight
+    # calculating mass for all atoms or molecular weight
     mass = 0.0
     for i in atom:
         mass += atom[i] * elements[i]
@@ -101,6 +101,12 @@ def calc_mass(instr):
 
 
 def main():
+    print("The following input formats are expected:"
+          "\n\ta single element, e.g. He"
+          "\n\ta sequence of elements, e.g., HHO"
+          "\n\tnumeric constants, e.g., H2O "
+          "\n\tnested formulas, e.g., (NH4)2SO4"
+          "\n\nEnter a formula: ")
     # take input as string
     formula = input()
     # printing output without rounding
