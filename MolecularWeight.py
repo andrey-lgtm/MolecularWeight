@@ -25,7 +25,7 @@ def calc_mass(arg):
                 'Cm': 247.0703, 'Bk': 247.0703, 'Cf': 251.0796, 'Es': 252.0829, 'Fm': 257.0951, 'Md': 258.0951,
                 'No': 259.1009, 'Lr': 262, 'Rf': 267, 'Db': 268, 'Sg': 271, 'Bh': 270, 'Hs': 269, 'Mt': 278,
                 'Ds': 281, 'Rg': 281, 'Cn': 285, 'Nh': 284, 'Fl': 289, 'Mc': 289, 'Lv': 292, 'Ts': 294, 'Og': 294}
-    # checking and arranging for atoms and compounds
+
     atom = {}
     i = 0
 
@@ -40,12 +40,11 @@ def calc_mass(arg):
             i += 1
             continue
 
-            # print(el)
         if elem not in elements.keys():
             print("Element {} not found in dict".format(elem))
             exit(1)
 
-        # Find how many of this atom
+        # Counts number of occurrences for this atom
         j = i + 1
         while j < len(arg) and 57 >= ord(arg[j]) >= 48:
             j += 1
@@ -56,7 +55,7 @@ def calc_mass(arg):
             not_elem = int(arg[i + 1:j])
         i = j - 1
 
-        # Check for surrounding brackets
+        # Checks for surrounding brackets
         bracket_lvl = 0  # bracket depth level
         for m in arg[:i]:
             if m in open_brackets:
@@ -64,10 +63,10 @@ def calc_mass(arg):
             if m in close_brackets:
                 bracket_lvl -= 1
 
-        # Find the multiplication factor
+        # Finds the multiplication factor
         m_factor = 1
 
-        # Escape out of the brackets one level at a time
+        # Escapes out of brackets one level at a time
         for b in range(bracket_lvl, 0, -1):
             b_current = b
             for m in range(i, len(arg)):
@@ -93,7 +92,7 @@ def calc_mass(arg):
         else:
             atom[elem] += m_factor * not_elem
         i += 1
-    # calculating mass for all atoms or molecular weight
+    # Calculates mass for all atoms (molecular weight)
     mass = 0.0
     for i in atom:
         mass += atom[i] * elements[i]
@@ -104,12 +103,12 @@ def main():
     print("The following input formats are expected:"
           "\n\ta single element, e.g. He"
           "\n\ta sequence of elements, e.g., HHO"
-          "\n\tnumeric constants, e.g., H2O "
+          "\n\tnumeric constants, e.g., H2O"
           "\n\tnested formulas, e.g., (NH4)2SO4"
           "\n\nEnter a formula: ")
-    # take input as string
+    # Takes input as a string
     formula = input()
-    # printing output without rounding
+    # Prints output without rounding
     print(calc_mass(formula))
 
 
